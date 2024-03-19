@@ -31,7 +31,7 @@ public final class CreatureConquest extends JavaPlugin implements @NotNull Liste
 
         FileConfiguration aconfig = AConfig.getConfig();
 
-        log.info("ENABLED FFF");
+        log.info("ENABLED");
         SummonBoss.Context bossContext = new SummonBoss.Context();
         for (String bossName : aconfig.getKeys(false)) {
             log.info(bossName);
