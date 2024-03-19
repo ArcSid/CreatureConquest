@@ -1,40 +1,16 @@
 boss1:
-  type: ARENA
-  bossName: Boss
-  minionName: Minion
+  bossType: Boss
+  minionType: Minion
   minionsRequiredToKill: 5
-  spawnWorld:
-    spawnWorldName: Buildingworld1
-    spawnX: 0
-    spawnY: 55
-    spawnZ: 0
-boss2:
-  type: ARENA
-  bossName: Boss
-  minionName: Minion
-  minionsRequiredToKill: 5
-  spawnWorld:
-    spawnWorldName: Buildingworld1
-    spawnX: 0
-    spawnY: 55
-    spawnZ: 0
-boss3:
-  type: ARENA
-  bossName: Boss
-  minionName: Minion
-  minionsRequiredToKill: 5
-  spawnWorld:
-    spawnWorldName: Buildingworld1
-    spawnX: 0
-    spawnY: 55
-    spawnZ: 0
-boss4:
-  type: ARENA
-  bossName: Boss
-  minionName: Minion
-  minionsRequiredToKill: 5
-  spawnWorld:
-    spawnWorldName: Buildingworld1
-    spawnX: 0
-    spawnY: 55
-    spawnZ: 0
+  rewards:
+    topNtoReward: 3
+    topRewards:
+      - "give %player% minecraft:torch 3"
+      - "give %player% minecraft:torch 2"
+      - "give %player% minecraft:torch 1"
+    rewardForAllParticipants: "give %player% minecraft:torch 5"
+  bossSpawn:
+    worldName: Buildingworld1
+    X: 0
+    Y: 55
+    Z: 0

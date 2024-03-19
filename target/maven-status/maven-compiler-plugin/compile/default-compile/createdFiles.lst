@@ -1,3 +1,4 @@
-org/arcsid/creatureconquest/ConfigReader.class
 org/arcsid/creatureconquest/CreatureConquest.class
 org/arcsid/creatureconquest/SummonBoss.class
+org/arcsid/creatureconquest/ConfigReader.class
+org/arcsid/creatureconquest/SummonBoss$Context.class

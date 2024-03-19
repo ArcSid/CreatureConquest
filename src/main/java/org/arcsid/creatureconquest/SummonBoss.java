@@ -22,13 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class SummonBoss implements Listener {
-    String bossType = "Boss";
-    String minionType = "Minion";
-    public int requiredToKill = 5;
-    int x = 0;
-    int y = 55;
-    int z = 0;
-    World world = Bukkit.getWorld("Buildingworld1");
+
     Location location;
     MythicMob boss;
     MythicMob minion;
@@ -36,49 +30,56 @@ public class SummonBoss implements Listener {
     boolean bossAlive;
     Entity entity;
     Map<String, Double> m;
+    private Context ctx;
 
-    public SummonBoss() {
-        this.location = new Location(this.world, (double)this.x, (double)this.y, (double)this.z);
-        this.boss = (MythicMob)MythicBukkit.inst().getMobManager().getMythicMob(this.bossType).orElse((MythicMob) null);
-        this.minion = (MythicMob)MythicBukkit.inst().getMobManager().getMythicMob(this.minionType).orElse((MythicMob) null);
-        this.killed = 0;
-        this.bossAlive = false;
-        this.m = new HashMap();
+    public SummonBoss(Context context) {
+        ctx = context;
+
+        World world = Bukkit.getWorld(ctx.worldName);
+        location = new Location(world, ctx.x, ctx.y, ctx.z);
+
+        boss = MythicBukkit.inst().getMobManager().getMythicMob(ctx.bossType).orElse(null);
+        minion = MythicBukkit.inst().getMobManager().getMythicMob(ctx.minionType).orElse(null);
+
+        killed = 0;
+        bossAlive = false;
+        m = new HashMap<>();
+
     }
 
     @EventHandler
     public void onMobKill(MythicMobDeathEvent mobDeath) throws InterruptedException {
-        if (mobDeath.getMob().getType() == this.minion && !this.bossAlive) {
-            ++this.killed;
-            if (this.requiredToKill == this.killed) {
+        if (mobDeath.getMob().getType() == minion && !bossAlive) {
+            ++killed;
+            if (ctx.requiredToKill == killed) {
                 try {
-                    this.entity = (new BukkitAPIHelper()).spawnMythicMob(this.bossType, this.location, 1);
+                    entity = (new BukkitAPIHelper()).spawnMythicMob(ctx.bossType, location, 1);
                 } catch (InvalidMobTypeException var3) {
                     throw new RuntimeException(var3);
                 }
 
-                Bukkit.broadcastMessage("BOSS SPAWNED: " + this.entity.getName() + " in " + this.entity.getLocation().getWorld().getName());
-                this.bossAlive = true;
+                Bukkit.broadcastMessage("&c&lBOSS SPAWNED: " + entity.getName() + " in " + entity.getLocation().getWorld().getName());
+                bossAlive = true;
             }
         }
 
-        if (mobDeath.getMob().getType() == this.boss) {
-            this.printMap(mobDeath.getKiller().getName());
-            this.m.clear();
-            this.bossAlive = false;
-            this.killed = 0;
+        if (mobDeath.getMob().getType() == boss) {
+            printMap(mobDeath.getKiller().getName());
+            m.clear();
+            bossAlive = false;
+            killed = 0;
         }
 
     }
 
     @EventHandler
     public void onBossDamaged(EntityDamageByEntityEvent damageEvent) {
-        if (damageEvent.getEntity() == this.entity) {
+        if (damageEvent.getEntity() == entity) {
             Bukkit.broadcastMessage(damageEvent.getDamager().getName() + " dealt " + damageEvent.getDamage() + " damage!");
-            if (this.m.containsKey(damageEvent.getDamager().getName())) {
-                this.m.merge(damageEvent.getDamager().getName(), damageEvent.getDamage(), Double::sum);
+            if (m.containsKey(damageEvent.getDamager().getName())) {
+                m.merge(damageEvent.getDamager().getName(), damageEvent.getDamage(), Double::sum);
             } else {
-                this.m.put(damageEvent.getDamager().getName(), damageEvent.getDamage());
+                m.put(damageEvent.getDamager().getName(), damageEvent.getDamage());
             }
         }
 
@@ -89,7 +90,7 @@ public class SummonBoss implements Listener {
         Bukkit.broadcastMessage("           Boss has been defeated!           ");
         Bukkit.broadcastMessage("                                             ");
         Bukkit.broadcastMessage("               Top damagers:                 ");
-        Iterator var2 = this.m.entrySet().iterator();
+        Iterator var2 = m.entrySet().iterator();
 
         while(var2.hasNext()) {
             Map.Entry<String, Double> me = (Map.Entry)var2.next();
@@ -99,5 +100,63 @@ public class SummonBoss implements Listener {
         Bukkit.broadcastMessage(lastDamager + " dealt the last blow");
         Bukkit.broadcastMessage("                                             ");
         Bukkit.broadcastMessage("*********************************************");
+    }
+
+    public static class Context {
+        String worldName;
+        String bossType = "NoBossName";
+        String minionType = "NoMinionName";
+        public int requiredToKill = -1;
+        int x = 0;
+        int y = 0;
+        int z = 0;
+
+        public Context setBossType(String bossType) {
+            this.bossType = bossType;
+            return this;
+        }
+
+        public Context setMinionType(String minionType) {
+            this.minionType = minionType;
+            return this;
+        }
+
+        public Context setRequiredToKill(int requiredToKill) {
+            this.requiredToKill = requiredToKill;
+            return this;
+        }
+
+        public Context setX(int x) {
+            this.x = x;
+            return this;
+        }
+
+        public Context setY(int y) {
+            this.y = y;
+            return this;
+        }
+
+        public Context setZ(int z) {
+            this.z = z;
+            return this;
+        }
+
+        public Context setWorldName(String worldName) {
+            this.worldName = worldName;
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return "Context{" +
+                    "worldName='" + worldName + '\'' +
+                    ", bossType='" + bossType + '\'' +
+                    ", minionType='" + minionType + '\'' +
+                    ", requiredToKill=" + requiredToKill +
+                    ", x=" + x +
+                    ", y=" + y +
+                    ", z=" + z +
+                    '}';
+        }
     }
 }
