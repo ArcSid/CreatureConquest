@@ -1,3 +1,7 @@
 /home/admin/CreatureConquest/src/main/java/org/arcsid/creatureconquest/CreatureConquest.java
 /home/admin/CreatureConquest/src/main/java/org/arcsid/creatureconquest/SummonBoss.java
+/home/admin/CreatureConquest/src/main/java/org/arcsid/creatureconquest/listeners/MythicMobKillListener.java
+/home/admin/CreatureConquest/src/main/java/org/arcsid/creatureconquest/BossMobManager.java
 /home/admin/CreatureConquest/src/main/java/org/arcsid/creatureconquest/ConfigReader.java
+/home/admin/CreatureConquest/src/main/java/org/arcsid/creatureconquest/listeners/MobDamagedListener.java
+/home/admin/CreatureConquest/src/main/java/org/arcsid/creatureconquest/BossSpawner.java
