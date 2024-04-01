@@ -1,4 +1,0 @@
-name: CreatureConquest
-version: '1.0-SNAPSHOT'
-main: org.arcsid.creatureconquest.CreatureConquest
-api-version: '1.19'

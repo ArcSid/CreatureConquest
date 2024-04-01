@@ -1,9 +1,0 @@
-org/arcsid/creatureconquest/CreatureConquest.class
-org/arcsid/creatureconquest/listeners/MythicMobKillListener.class
-org/arcsid/creatureconquest/SummonBoss.class
-org/arcsid/creatureconquest/BossMobManager.class
-org/arcsid/creatureconquest/BossSpawner.class
-org/arcsid/creatureconquest/listeners/MobDamagedListener.class
-org/arcsid/creatureconquest/ConfigReader.class
-org/arcsid/creatureconquest/SummonBoss$Context.class
-org/arcsid/creatureconquest/BossMobManager$BossDescriptor.class
