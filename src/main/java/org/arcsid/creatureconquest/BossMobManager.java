@@ -1,9 +1,13 @@
 package org.arcsid.creatureconquest;
 
 import io.lumine.mythic.api.mobs.MythicMob;
+import io.lumine.mythic.bukkit.events.MythicDamageEvent;
+import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -12,6 +16,7 @@ public class BossMobManager {
     private final static Logger log = Bukkit.getLogger();
     Map<String, BossSpawner> minionToBossSpawner = new HashMap<>();
     Map<String, BossSpawner> bossToBossSpawner = new HashMap<>();
+    Map<Integer, BossSpawner> spawnedBosses = new HashMap<>();
     List<BossDescriptor> bosses = new ArrayList<>();
 
     public BossMobManager(FileConfiguration bossesConfig) {
@@ -20,13 +25,17 @@ public class BossMobManager {
         printMap();
     }
 
+    public void onBossDamaged(EntityDamageByEntityEvent entityDamageByEntityEvent){
+        System.out.println("NAME " + entityDamageByEntityEvent.getEntity().getEntityId());
+    }
+
     public void onMobKilled(MythicMob killedMob) {
         BossSpawner boss  = minionToBossSpawner.get(killedMob.getInternalName());
         log.info(killedMob.getInternalName());
 
         if(boss != null){
 
-            log.info(boss.minionsKilled + killedMob.getInternalName());
+            log.info(boss.minionsKilled + " " + killedMob.getInternalName());
 
             boss.addKill();
 
@@ -36,7 +45,7 @@ public class BossMobManager {
         boss = bossToBossSpawner.get(killedMob.getInternalName());
 
         if(boss != null){
-            boss.resetOnBossDeath();
+            //boss.resetOnBossDeath();
         }
     }
 
@@ -69,7 +78,9 @@ public class BossMobManager {
                     .setY(bossConf.getInt("bossSpawn.Y"))
                     .setZ(bossConf.getInt("bossSpawn.Z"))
                     .setWorldName(bossConf.getString("bossSpawn.worldName"))
-                    .setRequiredToKill(bossConf.getInt("minionsRequiredToKill"));
+                    .setRequiredToKill(bossConf.getInt("minionsRequiredToKill"))
+                    .setTopRewardList(bossConf.getStringList("rewards.topRewards"))
+                    .setRewardForAll(bossConf.getString("rewards.rewardForAllParticipants"));
             log.info(bossDescriptor.toString());
             bosses.add(bossDescriptor);
         }
@@ -79,11 +90,23 @@ public class BossMobManager {
         String worldName;
         String bossType = "NoBossName";
         String minionType = "NoMinionName";
+        List<String> topRewards = new ArrayList<>();
+        String rewardForAll = "Nothing";
+
         public int requiredToKill = -1;
         int x = 0;
         int y = 0;
         int z = 0;
         int killed = 0;
+        public BossDescriptor setTopRewardList(List<String> list){
+            this.topRewards = list;
+            return this;
+        }
+
+        public BossDescriptor setRewardForAll(String reward){
+            this.rewardForAll= reward;
+            return this;
+        }
 
         public BossDescriptor setBossType(String bossType) {
             this.bossType = bossType;

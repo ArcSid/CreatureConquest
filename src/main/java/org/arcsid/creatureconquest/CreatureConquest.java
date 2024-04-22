@@ -8,6 +8,7 @@ package org.arcsid.creatureconquest;
 import java.util.logging.Logger;
 
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.arcsid.creatureconquest.listeners.MobDamagedListener;
 import org.arcsid.creatureconquest.listeners.MythicMobKillListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -31,6 +32,7 @@ public final class CreatureConquest extends JavaPlugin{
 
         BossMobManager bossMobManager = new BossMobManager(bossConfigs.getConfig());
         MythicMobKillListener mythicMobKillListener = new MythicMobKillListener(bossMobManager);
+        MobDamagedListener mobDamagedListener = new MobDamagedListener(bossMobManager);
     }
 
     private void assertDependencyPlugins(){

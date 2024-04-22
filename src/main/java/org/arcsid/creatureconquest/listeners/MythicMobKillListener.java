@@ -15,6 +15,7 @@ public class MythicMobKillListener implements Listener {
         this.bossMobManager = bossMobManager;
         Bukkit.getPluginManager().registerEvents(this, CreatureConquest.getProvidingPlugin(CreatureConquest.class));
     }
+
     @EventHandler
     public void onMobKill(MythicMobDeathEvent mobDeath){
         bossMobManager.onMobKilled(mobDeath.getMobType());
